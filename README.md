@@ -15,7 +15,7 @@ This code repository is forked from the original (see http link above) with the 
 TDF is Windows-only. Source code is written on the Microsoft .NET Framework and using WinForms. 
 
 ### Source code 
-A Windows installer is provided for ordinary users. Those who wish to compile TDF from source code, the Visual Studio "Publish" method can be used to generate the installer program. However, a more satisfactory method will be to create an TDF installer program using Inno Setup. The development Windows PC should also have these installed:
+A Windows installer is provided for ordinary users. Those who wish to compile TDF from source code, the Visual Studio "Publish" method can be used to generate the installer program. However, a more satisfactory method will be to create an TDF installer program using Inno Setup. To build TDF from source code, the development Windows PC should have these installed:
 - [Microsoft Visual Studio](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=16): current version is VS2019. 
 - [.NET Framework 3.5](https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10) (Windows 10 would have included it. If that is the case on the development computer, this pre-requisit is satisfied and no installation step is needed for this)
 - [Inno Setup](https://jrsoftware.org/isinfo.php): When Visual Studio is instructed to "build" TDF, a post-build step invokes Inno Setup whcih will package the necessary files such as executables, icons and other resources into an installer program - the "distributable". The end user executes this program on their Windows PC to set up TDF on the target computer. 
