@@ -12,7 +12,7 @@ This code repository is forked from the original (see http link above) with the 
 - A program icon is designed for TDF, and it is added to enhance the identity of TDF.
 - Installer: with this version, TDF can now distribute to the end user by providing a better installer. 
 
-TDF is Windows-only. Source code is written on the Microsoft .NET Framework and using WinForms. 
+Source code is written on the Microsoft .NET Framework and the graphical user interface is based on WinForms. TDF can be ported to other prevalent operating system such as MacOS and Linux using, for example, Mono. The focus of this repo at this point of time remains in the domain of the Windows PC. 
 
 ### Build from source code 
 A Windows installer is provided for ordinary users. Those who wish to compile TDF from source code, the Visual Studio "Publish" method can be used to generate the installer program. However, a more satisfactory method will be to create an TDF installer program using Inno Setup. To build TDF from source code, the development Windows PC should have these installed:
