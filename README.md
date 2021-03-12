@@ -12,3 +12,8 @@ This code repository is a version forked from the original (see http link above)
 - Icon is added to enhance the identity of the TDF.
 - Installer: with this version, TDF will now ship to the end user with a proper installer. 
 TDF is Windows-only mainly due to it being written on the Microsoft .NET Framework and more due to using WinForms. 
+
+### Source code 
+A Windows installer is provided for ordinary users. Those who wish to compile TDF from source code, the Visual Studio "Publish" method is not used. Instead, the TDF installer program is created using Inno Setup. In addition to Visual Studio, the development Windows PC should also have these installed:
+- [Inno Setup](https://jrsoftware.org/isinfo.php): When Visual Studio is instructed to "build" TDF, a post-build step invokes Inno Setup whcih will package the necessary files such as executables, icons and other resources into an installer program. The end user executes this program on their Windows PC to set up TDF on the target computer. 
+- [Inno Download Plugin](https://mitrichsoftware.wordpress.com/inno-setup-tools/inno-download-plugin/): The installer to be built will use IDP to automatically check for the required Microsoft .Net Framework version. If not detected on the target Windows computer, it will be installed automatically, provided that an Internet connection is available on that computer. 
