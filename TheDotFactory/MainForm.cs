@@ -839,7 +839,7 @@ namespace TheDotFactory
             // the font information
             FontInfo fontInfo = new FontInfo();
 
-            // get teh characters we need to generate from the input text, removing duplicates
+            // get the characters we need to generate from the input text, removing duplicates
             fontInfo.generatedChars = getCharactersToGenerate();
 
             // set font into into
