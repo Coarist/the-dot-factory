@@ -11,6 +11,7 @@ This code repository is forked from the original (see http link above) with the 
 - Micrososft Visual Studio 2019 (VS2019): code editing and build tool using up-to-date IDE
 - A program icon is designed for TDF, and it is added to enhance the identity of TDF.
 - Installer: with this version, TDF can now distribute to the end user by providing a better installer. 
+
 TDF is Windows-only. Source code is written on the Microsoft .NET Framework and using WinForms. 
 
 ### Source code 
