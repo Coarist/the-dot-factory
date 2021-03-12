@@ -10,8 +10,8 @@ This code repository is forked from the original (see http link above) with the 
 - Windows 10: explicitly state that this version works on the Windows 10 platform
 - Micrososft Visual Studio 2019 (VS2019): code editing and build tool using up-to-date IDE
 - Icon is added to enhance the identity of TDF.
-- Installer: with this version, TDF will now ship to the end user with a proper installer. 
-TDF is Windows-only mainly due to it being written on the Microsoft .NET Framework and more due to using WinForms. 
+- Installer: with this version, TDF will now ship to the end user by providing a better installer. 
+TDF is Windows-only. Source code is written on the Microsoft .NET Framework and using WinForms. 
 
 ### Source code 
 A Windows installer is provided for ordinary users. Those who wish to compile TDF from source code, the Visual Studio "Publish" method can be used to generate the installer program. However, a more satisfactory method will be to create an TDF installer program using Inno Setup. For this reason, the development Windows PC should also have these installed (in addition to Visual Studio):
