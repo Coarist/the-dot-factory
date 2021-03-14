@@ -29,4 +29,6 @@ The Visual Studio project has added automation to generate a Windows installer w
 
 ![Project properties](https://github.com/Coarist/the-dot-factory/blob/master/Properties.jpg?raw=true)
 
-
+<p align="center">
+  <img src="https://github.com/Coarist/the-dot-factory/blob/master/Properties.jpg" width="350" title="Visual Studio project properties">
+</p>
