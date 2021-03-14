@@ -29,10 +29,13 @@ The Visual Studio project has added automation to generate a Windows installer w
 
 ### Path to Inno Setup executable 
 In Visual Studio, go to Solution Explorer pane. Right click "TheDotFactory" and in the context menu select "Properties". The screenshot below will be displayed. 
+
 <p align="left">
   <img src="https://github.com/Coarist/the-dot-factory/blob/master/SlnExplr.JPG?raw=true" width="350" title="Visual Studio project properties">
 </p>
+
 The path to Inno Setup needs to be updated by the developer to reflect the correct location on his/her development PC (see text in yellow highlighter).
+
 <p align="left">
   <img src="https://github.com/Coarist/the-dot-factory/blob/master/Properties.JPG?raw=true" width="350" title="Visual Studio project properties">
 </p>
