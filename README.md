@@ -23,3 +23,7 @@ With the items above, the TDF program should build successfully. Additionally, a
 
 - [Inno Setup](https://jrsoftware.org/isinfo.php): When Visual Studio is instructed to "build" TDF, a post-build step invokes Inno Setup which will package the necessary files such as executables, icons and other resources into an installer program - the "distributable". The end user executes this program on their Windows PC to set up TDF on the target computer. 
 - [Inno Download Plugin (IDP)](https://mitrichsoftware.wordpress.com/inno-setup-tools/inno-download-plugin/): When creating the installer program, Inno Setup (above) will use IDP to make the installer capable of checking required Microsoft .NET Framework. If it is absent on the target Windows computer, with IDP, it will be installed automatically, provided that an Internet connection is available on that computer. 
+
+### Additional configurations
+The Visual Studio project has added automation to generate a Windows installer when build configuration is "Release". The local PC would have Inno Setup and Inno Download Plugin (above) installed. The developer who wish to build this installer would need to specify the correct path to these tools on the local machine in a few places. 
+![Project properties](https://github.com/Coarist/the-dot-factory/)
