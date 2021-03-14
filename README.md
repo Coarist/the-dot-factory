@@ -40,9 +40,13 @@ The screenshot below will be displayed. The path to Inno Setup needs to be updat
   <img src="https://github.com/Coarist/the-dot-factory/blob/master/Properties.JPG?raw=true" width="350" title="Visual Studio project properties">
 </p>
 
-In our second step, the path to Inno Download Plugin would need to be specifled correctly. Refer to the first screen shot above shiwng the Visual Studio Solution Explorer, right-click the item "TDF_InnoScript.iss" and in the context menu click "Open". The contents of this file will be shown on the editor pane. 
+In our second step, the path to Inno Download Plugin would need to be specifled correctly. Refer to the first screen shot above shwwng the Visual Studio Solution Explorer, right-click the item "TDF_InnoScript.iss" and in the context menu click "Open". The contents of this file will be shown on the editor pane. 
 
 <p align="left">
   <img src="https://github.com/Coarist/the-dot-factory/blob/master/iss.JPG?raw=true" width="350" title="Visual Studio project properties">
 </p>
 
+The path to Inno Download Plugin needs to be updated by the developer to reflect the correct location on his/her development PC (text in yellow highlighter). This would be the second and last step. 
+
+### Build TheDotFactory 
+When configured correctly in Visual Studio, the developer may try out "Build"-ing TDF using the "Relesase" project configuration. Observe that after a successful build, a Windows File Explorer window will be shown. The window shows the TDF installer program that has just been created. This verifies that the post-build step has been executed. The "Output" pane in Visual Studio can be inspected to see detail messages generated during this step. 
