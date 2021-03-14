@@ -36,7 +36,7 @@ namespace TheDotFactory
         private static String nl = Environment.NewLine;
 
         // application version
-        public const string ApplicationVersion = "0.1.4";
+        public const string ApplicationVersion = "1.1";
 
         // current loaded bitmap
         private Bitmap m_currentLoadedBitmap = null;
@@ -798,8 +798,8 @@ namespace TheDotFactory
 
                 // populate number of rows
                 getAbsoluteCharacterDimensions(ref fontInfo.characters[charIdx].bitmapToGenerate, 
-                                                ref fontInfo.characters[charIdx].width,
-                                                ref fontInfo.characters[charIdx].height); 
+                                               ref fontInfo.characters[charIdx].width,
+                                               ref fontInfo.characters[charIdx].height); 
 
                 // populate offset of character
                 fontInfo.characters[charIdx].offsetInBytes = charByteOffset;
@@ -1195,8 +1195,18 @@ namespace TheDotFactory
             // don't display
             if (descFormat == OutputConfiguration.DescriptorFormat.DontDisplay) return "";
 
+            //-----------------------------------------------------------------
+            // Optimisation using StringBuilder                       14Mar2021
+            //-----------------------------------------------------------------
+            // getCharacterDescString() is called in a loop therefore good 
+            // performance improvement is obtained by optimizing this function.
+            //     Before 0.022005 seconds
+            //     After  0.013001 seconds
+            //-----------------------------------------------------------------
+
             // add comma and return
-            return String.Format("{0}, ", convertValueByDescriptorFormat(descFormat, valueInBits));
+            return new StringBuilder(convertValueByDescriptorFormat(descFormat, valueInBits).ToString()).Append(", ").ToString();
+            //return String.Format("{0}, ", convertValueByDescriptorFormat(descFormat, valueInBits));
         }
 
         // get teh character descriptor string
@@ -1205,15 +1215,39 @@ namespace TheDotFactory
             // don't display
             if (descFormat == OutputConfiguration.DescriptorFormat.DontDisplay) return "";
 
+            //-----------------------------------------------------------------
+            // Optimisation using StringBuilder                       14Mar2021
+            //-----------------------------------------------------------------
+            // getCharacterDescName() is called in a loop therefore good 
+            // performance improvement is obtained by optimizing this function.
+            //     Before 0.0130007 seconds
+            //     After  0.0129994 seconds
+            //-----------------------------------------------------------------
+
+            StringBuilder s = new StringBuilder("[Char ").Append(name);
+            switch (descFormat)
+            {
+                case OutputConfiguration.DescriptorFormat.DisplayInBits:
+                    s.Append(" in bits], ");
+                    break;
+                case OutputConfiguration.DescriptorFormat.DisplayInBytes:
+                    s.Append(" in bytes], ");
+                    break;
+                default:
+                    s.Append("], ");
+                    break;
+            }
+            return s.ToString();
+
             // create result string
-            string descFormatName = "";
+            //string descFormatName = "";
 
             // set value
-            if (descFormat == OutputConfiguration.DescriptorFormat.DisplayInBits) descFormatName = "bits";
-            if (descFormat == OutputConfiguration.DescriptorFormat.DisplayInBytes) descFormatName = "bytes";
+            //if (descFormat == OutputConfiguration.DescriptorFormat.DisplayInBits) descFormatName = "bits";
+            //if (descFormat == OutputConfiguration.DescriptorFormat.DisplayInBytes) descFormatName = "bytes";
 
             // add comma and return
-            return String.Format("[Char {0} in {1}], ", name, descFormatName);
+            //return String.Format("[Char {0} in {1}], ", name, descFormatName);
         }
 
         // get only the variable name from an expression in a specific format
@@ -1354,7 +1388,7 @@ namespace TheDotFactory
                                                  bool includeTypeDefinition, bool includeBlockIndex)
         {
             // get block id
-            string blockIdString = String.Format("Block{0}", currentBlockIndex);
+            //string blockIdString = String.Format("Block{0}", currentBlockIndex);
 
             // variable name
             string variableName = String.Format(m_outputConfig.varNfCharInfo, getFontName(ref fontInfo.font));
@@ -1362,11 +1396,26 @@ namespace TheDotFactory
             // remove type unless required
             if (!includeTypeDefinition) variableName = getVariableNameFromExpression(variableName);
 
+            //-----------------------------------------------------------------
+            // Optimisation using StringBuilder                       14Mar2021
+            //-----------------------------------------------------------------
+            // charDescArrayGetBlockName() is called in a loop therefore good 
+            // performance improvement is obtained by optimizing this function.
+            //     Before 0.013001 seconds
+            //     After  0.013000 seconds
+            //-----------------------------------------------------------------
+
             // return the block name
-            return String.Format("{0}{1}{2}",
-                                    variableName,
-                                    includeBlockIndex ? blockIdString : "",
-                                    includeTypeDefinition ? "[]" : "");
+
+            StringBuilder s = new StringBuilder(variableName);
+            if (includeBlockIndex) s.Append("Block").Append(currentBlockIndex);
+            if (includeTypeDefinition) s.Append("[]");
+            return s.ToString();
+
+            //return String.Format("{0}{1}{2}",
+            //                        variableName,
+            //                        includeBlockIndex ? blockIdString : "",
+            //                        includeTypeDefinition ? "[]" : "");
         }
 
         // get the display string for a character (ASCII is displayed as 'x', non-ASCII as numeric)
@@ -1406,6 +1455,8 @@ namespace TheDotFactory
             //     16 points character size
             //     3 bytes character height
             //     22823-37666 character range
+            //     With debugger attached (incidentally performance is much 
+            //     slower in standalone "Release" builds)
             // Test results:
             //     was using string +=              5.8389960 seconds
             //     now using StringBuilder.Append() 0.0220005 seconds
@@ -1437,7 +1488,7 @@ namespace TheDotFactory
                     s0.Append(m_commentStartString).Append("Character descriptors for ");
                     s0.Append(fontInfo.font.Name).Append(" ");
                     s0.Append(Math.Round(fontInfo.font.Size)).Append("pt");
-                    s0.Append(multipleDescBlocksExist ? blockNumberString : "");
+                    if(multipleDescBlocksExist) s0.Append(blockNumberString);
                     s0.AppendLine(m_commentEndString);
                     //resultTextSource += String.Format("{0}Character descriptors for {1} {2}pt{3}{4}" + nl,
                     //                                    m_commentStartString, fontInfo.font.Name,
@@ -1445,11 +1496,10 @@ namespace TheDotFactory
                     //                                    m_commentEndString);
 
                     // describe character array
-                    s0.Append(m_commentStartString).Append("{{ ");
+                    s0.Append(m_commentStartString).Append("{ ");
                     s0.Append(getCharacterDescName("width", m_outputConfig.descCharWidth));
                     s0.Append(getCharacterDescName("height", m_outputConfig.descCharHeight));
-                    s0.Append("[Offset into {3}CharBitmaps in bytes] }}");
-                    s0.Append(getFontName(ref fontInfo.font));
+                    s0.Append("[Offset into ").Append(getFontName(ref fontInfo.font)).Append("CharBitmaps in bytes] }");
                     s0.AppendLine(m_commentEndString);
                     //resultTextSource += String.Format("{0}{{ {1}{2}[Offset into {3}CharBitmaps in bytes] }}{4}" + nl,
                     //                                    m_commentStartString,
@@ -1461,18 +1511,20 @@ namespace TheDotFactory
 
                 // output block header
                 s0.Append(charDescArrayGetBlockName(fontInfo, characterBlockList.IndexOf(block), true, multipleDescBlocksExist));
-                s0.AppendLine(" = ").AppendLine("{{");
+                s0.AppendLine(" = ").AppendLine("{");
                 //resultTextSource += String.Format("{0} = "+ nl+"{{" + nl, charDescArrayGetBlockName(fontInfo, characterBlockList.IndexOf(block), true, multipleDescBlocksExist));
 
                 // iterate characters
                 foreach (CharacterDescriptorArrayBlock.Character character in block.characters)
                 {
+                    // Filter to remove [0, 0] items 14Mar2021
+                    if (character.width == 0 && character.height == 0) continue;
                     // add character
-                    s0.Append("\t{{");
+                    s0.Append("\t{");
                     s0.Append(getCharacterDescString(m_outputConfig.descCharWidth, character.width));
                     s0.Append(getCharacterDescString(m_outputConfig.descCharHeight, character.height));
                     s0.Append(character.offset);
-                    s0.Append("}}, \t\t");
+                    s0.Append("}, \t\t");
                     s0.Append(m_commentStartString).Append(character.character);
                     s0.Append(m_commentEndString).AppendLine(" ");
                     //resultTextSource += String.Format("\t{{{0}{1}{2}}}, \t\t{3}{4}{5}" + nl,
@@ -1509,7 +1561,7 @@ namespace TheDotFactory
                     //                                    Math.Round(fontInfo.font.Size), m_commentEndString);
 
                     // describe character array
-                    s0.Append(m_commentStartString).Append("{{ start character, end character, ptr to descriptor block array }}");
+                    s0.Append(m_commentStartString).Append("{ start character, end character, ptr to descriptor block array }");
                     s0.AppendLine(m_commentEndString);
                     //resultTextSource += String.Format("{0}{{ start character, end character, ptr to descriptor block array }}{1}" + nl,
                     //                                    m_commentStartString,
@@ -1517,10 +1569,10 @@ namespace TheDotFactory
                 }
 
                 // format the block lookup header
-                s0.AppendLine("const FONT_CHAR_INFO_LOOKUP");
+                s0.AppendLine("const FONT_CHAR_INFO_LOOKUP ");
                 s0.Append(getCharacterDescriptorArrayLookupDisplayString(fontInfo));                
                 s0.AppendLine("[] = ");
-                s0.AppendLine("{{");
+                s0.AppendLine("{");
                 //resultTextSource += String.Format("const FONT_CHAR_INFO_LOOKUP {0}[] = " + nl+"{{" + nl, 
                 //                                    getCharacterDescriptorArrayLookupDisplayString(fontInfo));
 
@@ -1532,11 +1584,11 @@ namespace TheDotFactory
                                                             lastChar = (CharacterDescriptorArrayBlock.Character)block.characters[block.characters.Count - 1];
 
                     // create current block description
-                    s0.Append("\t{{");
+                    s0.Append("\t{");
                     s0.Append(getCharacterDisplayString(firstChar.character)).Append(", ");
                     s0.Append(getCharacterDisplayString(lastChar.character)).Append(", &");
                     s0.Append(charDescArrayGetBlockName(fontInfo, characterBlockList.IndexOf(block), false, true));
-                    s0.AppendLine("}},");
+                    s0.AppendLine("},");
                     //resultTextSource += String.Format("\t{{{0}, {1}, &{2}}}," + nl,
                     //                                            getCharacterDisplayString(firstChar.character),
                     //                                            getCharacterDisplayString(lastChar.character),
@@ -1550,7 +1602,7 @@ namespace TheDotFactory
 
             resultTextSource = s0.ToString();
 #if DEBUG
-            Console.WriteLine((DateTime.Now - t0).TotalSeconds + " seconds: function generateStringsFromCharacterDescriptorBlockList()");
+            Console.WriteLine((DateTime.Now - t0).TotalSeconds + " seconds: generateStringsFromCharacterDescriptorBlockList()");
 #endif
         }
 
@@ -1963,7 +2015,7 @@ namespace TheDotFactory
             String [] lines = outputString.Split(new string[] {nl}, StringSplitOptions.None);
 
             // for now don't syntax color for more than 2000 lines
-            if (lines.Length > 1500)
+            if (lines.Length > 5000)
             {
                 // just set text
                 outputTextBox.Text = outputString;
