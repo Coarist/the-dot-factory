@@ -1399,9 +1399,31 @@ namespace TheDotFactory
             // set whether we'll generate lookups
             blockLookupGenerated = multipleDescBlocksExist;
 
+            //-----------------------------------------------------------------
+            // Optimisation (speeding up code execution)              14Mar2021
+            //-----------------------------------------------------------------
+            // Test case:
+            //     16 points character size
+            //     3 bytes character height
+            //     22823-37666 character range
+            // Test results:
+            //     was using string +=              5.8389960 seconds
+            //     now using StringBuilder.Append() 0.0220005 seconds
+            // Notes: 
+            //     Significant improvements has been obtained by this effort. 
+            //     Task-parallel will make the code more difficult to read. It
+            //     is shelved for the time being until the need arises. 
+            //-----------------------------------------------------------------
+
             //
             // Generate descriptor arrays
             //
+
+#if DEBUG
+            DateTime t0 = DateTime.Now;
+#endif
+
+            StringBuilder s0 = new StringBuilder(resultTextSource);
 
             // iterate over blocks
             foreach (CharacterDescriptorArrayBlock block in characterBlockList)
@@ -1412,38 +1434,59 @@ namespace TheDotFactory
                     string blockNumberString = String.Format("(block #{0})", characterBlockList.IndexOf(block));
 
                     // result string
-                    resultTextSource += String.Format("{0}Character descriptors for {1} {2}pt{3}{4}" + nl,
-                                                        m_commentStartString, fontInfo.font.Name,
-                                                        Math.Round(fontInfo.font.Size), multipleDescBlocksExist ? blockNumberString : "",
-                                                        m_commentEndString);
+                    s0.Append(m_commentStartString).Append("Character descriptors for ");
+                    s0.Append(fontInfo.font.Name).Append(" ");
+                    s0.Append(Math.Round(fontInfo.font.Size)).Append("pt");
+                    s0.Append(multipleDescBlocksExist ? blockNumberString : "");
+                    s0.AppendLine(m_commentEndString);
+                    //resultTextSource += String.Format("{0}Character descriptors for {1} {2}pt{3}{4}" + nl,
+                    //                                    m_commentStartString, fontInfo.font.Name,
+                    //                                    Math.Round(fontInfo.font.Size), multipleDescBlocksExist ? blockNumberString : "",
+                    //                                    m_commentEndString);
 
                     // describe character array
-                    resultTextSource += String.Format("{0}{{ {1}{2}[Offset into {3}CharBitmaps in bytes] }}{4}" + nl,
-                                                        m_commentStartString,
-                                                        getCharacterDescName("width", m_outputConfig.descCharWidth),
-                                                        getCharacterDescName("height", m_outputConfig.descCharHeight),
-                                                        getFontName(ref fontInfo.font),
-                                                        m_commentEndString);
+                    s0.Append(m_commentStartString).Append("{{ ");
+                    s0.Append(getCharacterDescName("width", m_outputConfig.descCharWidth));
+                    s0.Append(getCharacterDescName("height", m_outputConfig.descCharHeight));
+                    s0.Append("[Offset into {3}CharBitmaps in bytes] }}");
+                    s0.Append(getFontName(ref fontInfo.font));
+                    s0.AppendLine(m_commentEndString);
+                    //resultTextSource += String.Format("{0}{{ {1}{2}[Offset into {3}CharBitmaps in bytes] }}{4}" + nl,
+                    //                                    m_commentStartString,
+                    //                                    getCharacterDescName("width", m_outputConfig.descCharWidth),
+                    //                                    getCharacterDescName("height", m_outputConfig.descCharHeight),
+                    //                                    getFontName(ref fontInfo.font),
+                    //                                    m_commentEndString);
                 }
 
                 // output block header
-                resultTextSource += String.Format("{0} = "+ nl+"{{" + nl, charDescArrayGetBlockName(fontInfo, characterBlockList.IndexOf(block), true, multipleDescBlocksExist));
+                s0.Append(charDescArrayGetBlockName(fontInfo, characterBlockList.IndexOf(block), true, multipleDescBlocksExist));
+                s0.AppendLine(" = ").AppendLine("{{");
+                //resultTextSource += String.Format("{0} = "+ nl+"{{" + nl, charDescArrayGetBlockName(fontInfo, characterBlockList.IndexOf(block), true, multipleDescBlocksExist));
 
                 // iterate characters
                 foreach (CharacterDescriptorArrayBlock.Character character in block.characters)
                 {
                     // add character
-                    resultTextSource += String.Format("\t{{{0}{1}{2}}}, \t\t{3}{4}{5}" + nl,
-                                                    getCharacterDescString(m_outputConfig.descCharWidth, character.width),
-                                                    getCharacterDescString(m_outputConfig.descCharHeight, character.height),
-                                                    character.offset,
-                                                    m_commentStartString,
-                                                    character.character,
-                                                    m_commentEndString + " ");
+                    s0.Append("\t{{");
+                    s0.Append(getCharacterDescString(m_outputConfig.descCharWidth, character.width));
+                    s0.Append(getCharacterDescString(m_outputConfig.descCharHeight, character.height));
+                    s0.Append(character.offset);
+                    s0.Append("}}, \t\t");
+                    s0.Append(m_commentStartString).Append(character.character);
+                    s0.Append(m_commentEndString).AppendLine(" ");
+                    //resultTextSource += String.Format("\t{{{0}{1}{2}}}, \t\t{3}{4}{5}" + nl,
+                    //                                getCharacterDescString(m_outputConfig.descCharWidth, character.width),
+                    //                                getCharacterDescString(m_outputConfig.descCharHeight, character.height),
+                    //                                character.offset,
+                    //                                m_commentStartString,
+                    //                                character.character,
+                    //                                m_commentEndString + " ");
                 }
 
                 // terminate current block
-                resultTextSource += "};" + nl + nl;
+                s0.AppendLine("};").AppendLine();
+                //resultTextSource += "};" + nl + nl;
             }
 
             //
@@ -1457,19 +1500,29 @@ namespace TheDotFactory
                 if (m_outputConfig.commentVariableName)
                 {
                     // result string
-                    resultTextSource += String.Format("{0}Block lookup array for {1} {2}pt {3}" + nl,
-                                                        m_commentStartString, fontInfo.font.Name,
-                                                        Math.Round(fontInfo.font.Size), m_commentEndString);
+                    s0.Append(m_commentStartString).Append("Block lookup array for ");
+                    s0.Append(fontInfo.font.Name).Append(" ");
+                    s0.Append(Math.Round(fontInfo.font.Size)).Append("pt ");
+                    s0.AppendLine(m_commentEndString);
+                    //resultTextSource += String.Format("{0}Block lookup array for {1} {2}pt {3}" + nl,
+                    //                                    m_commentStartString, fontInfo.font.Name,
+                    //                                    Math.Round(fontInfo.font.Size), m_commentEndString);
 
                     // describe character array
-                    resultTextSource += String.Format("{0}{{ start character, end character, ptr to descriptor block array }}{1}" + nl,
-                                                        m_commentStartString,
-                                                        m_commentEndString);
+                    s0.Append(m_commentStartString).Append("{{ start character, end character, ptr to descriptor block array }}");
+                    s0.AppendLine(m_commentEndString);
+                    //resultTextSource += String.Format("{0}{{ start character, end character, ptr to descriptor block array }}{1}" + nl,
+                    //                                    m_commentStartString,
+                    //                                    m_commentEndString);
                 }
 
                 // format the block lookup header
-                resultTextSource += String.Format("const FONT_CHAR_INFO_LOOKUP {0}[] = " + nl+"{{" + nl, 
-                                                    getCharacterDescriptorArrayLookupDisplayString(fontInfo));
+                s0.AppendLine("const FONT_CHAR_INFO_LOOKUP");
+                s0.Append(getCharacterDescriptorArrayLookupDisplayString(fontInfo));                
+                s0.AppendLine("[] = ");
+                s0.AppendLine("{{");
+                //resultTextSource += String.Format("const FONT_CHAR_INFO_LOOKUP {0}[] = " + nl+"{{" + nl, 
+                //                                    getCharacterDescriptorArrayLookupDisplayString(fontInfo));
 
                 // iterate
                 foreach (CharacterDescriptorArrayBlock block in characterBlockList)
@@ -1479,15 +1532,26 @@ namespace TheDotFactory
                                                             lastChar = (CharacterDescriptorArrayBlock.Character)block.characters[block.characters.Count - 1];
 
                     // create current block description
-                    resultTextSource += String.Format("\t{{{0}, {1}, &{2}}}," + nl,
-                                                                getCharacterDisplayString(firstChar.character),
-                                                                getCharacterDisplayString(lastChar.character),
-                                                                charDescArrayGetBlockName(fontInfo, characterBlockList.IndexOf(block), false, true));
+                    s0.Append("\t{{");
+                    s0.Append(getCharacterDisplayString(firstChar.character)).Append(", ");
+                    s0.Append(getCharacterDisplayString(lastChar.character)).Append(", &");
+                    s0.Append(charDescArrayGetBlockName(fontInfo, characterBlockList.IndexOf(block), false, true));
+                    s0.AppendLine("}},");
+                    //resultTextSource += String.Format("\t{{{0}, {1}, &{2}}}," + nl,
+                    //                                            getCharacterDisplayString(firstChar.character),
+                    //                                            getCharacterDisplayString(lastChar.character),
+                    //                                            charDescArrayGetBlockName(fontInfo, characterBlockList.IndexOf(block), false, true));
                 }
 
                 // terminate block lookup
-                resultTextSource += "};" + nl + nl;
+                s0.AppendLine("};").AppendLine();
+                //resultTextSource += "};" + nl + nl;
             }
+
+            resultTextSource = s0.ToString();
+#if DEBUG
+            Console.WriteLine((DateTime.Now - t0).TotalSeconds + " seconds: function generateStringsFromCharacterDescriptorBlockList()");
+#endif
         }
 
         //
@@ -1538,7 +1602,7 @@ namespace TheDotFactory
             resultTextHeader += String.Format("extern {0};" + nl, charBitmapVarName);
 
             // source var
-            resultTextSource += String.Format("{0} = " + nl+"{{" + nl, charBitmapVarName);
+            resultTextSource += String.Format("{0} = " + nl + "{{" + nl, charBitmapVarName);
 
             // iterate through letters
             for (int charIdx = 0; charIdx < fontInfo.characters.Length; ++charIdx)
@@ -1587,7 +1651,7 @@ namespace TheDotFactory
             //
             // Font descriptor
             //
-            
+
             // according to config
             if (m_outputConfig.commentVariableName)
             {
@@ -1606,7 +1670,7 @@ namespace TheDotFactory
 
             // the font character height
             string fontCharHeightString = "", spaceCharacterPixelWidthString = "";
-            
+
             // get character height sstring - displayed according to output configuration
             if (m_outputConfig.descFontHeight != OutputConfiguration.DescriptorFormat.DontDisplay)
             {
@@ -1628,7 +1692,7 @@ namespace TheDotFactory
             }
 
             // font info
-            resultTextSource += String.Format("{2} =" + nl+"{{" + nl +
+            resultTextSource += String.Format("{2} =" + nl + "{{" + nl +
                                               "{3}" +
                                               "\t{4}, {0} Start character{1}" + nl +
                                               "\t{5}, {0} End character{1}" + nl +
@@ -1658,7 +1722,7 @@ namespace TheDotFactory
                 resultTextHeader += String.Format("extern {0}[];" + nl, String.Format(m_outputConfig.varNfCharInfo, getFontName(ref fontInfo.font)));
             }
         }
-    
+
         // get the descriptors
         private string getFontInfoDescriptorsString(FontInfo fontInfo, bool blockLookupGenerated)
         {
