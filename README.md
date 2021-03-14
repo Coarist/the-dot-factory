@@ -27,8 +27,8 @@ With the items above, the TDF program should build successfully. Additionally, a
 ### Additional configurations
 The Visual Studio project has added automation to generate a Windows installer when build configuration is "Release". The local PC would have Inno Setup and Inno Download Plugin (above) installed. The developer who wish to build this installer would need to specify the correct path to these tools on the local machine in a few places. 
 
-![Project properties](https://github.com/Coarist/the-dot-factory/blob/master/Properties.JPG?raw=true?raw=true)
-
+### Path to Inno Setup executable 
+In Visual Studio, go to Solution Explorer pane. Right click "TheDotFactory" and in the context menu select "Properties". The screenshot below will be displayed. The path to Inno Setup needs to be updated by the developer to reflect the correct location on his/her development PC (see text in yellow highlighter).
 <p align="left">
   <img src="https://github.com/Coarist/the-dot-factory/blob/master/Properties.JPG?raw=true" width="350" title="Visual Studio project properties">
 </p>
