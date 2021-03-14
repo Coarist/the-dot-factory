@@ -11,7 +11,7 @@ This code repository is forked from the original (see http link above) with the 
 - Micrososft Visual Studio 2019 (VS2019): code editing and build tool using up-to-date IDE
 - A program icon is designed for **TDF**, and it is given to **TDF** to enhance its sense of product identity.
 - Installer: with this version, **TDF** can now distribute to the end user by providing a better installer. 
-- Faster execution - handles larger number of characters better.
+- Faster execution - when generating larger outputs, operation feels noticably speedier.
 
 Source code is written on the **Microsoft .NET Framework** and the graphical user interface is based on WinForms. **TDF** can be ported to other prevalent operating system such as MacOS and Linux using, for example, Mono. The focus of this repo at this point of time remains in the domain of the Windows PC. 
 
