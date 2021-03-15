@@ -1,8 +1,6 @@
 <p align="left">
   <img src="https://github.com/Coarist/the-dot-factory/blob/master/TheDotFactory/Logo1Small.png?raw=true" width="120" title="Visual Studio project properties">
-</p>
-
-# The Dot Factory - TDF 
+</p># The Dot Factory - TDF 
 Generates fonts for dot matrix displays. Read more and download binaries [here](http://www.eran.io/the-dot-factory-an-lcd-font-and-image-generator/).
 
 ### Contributing
