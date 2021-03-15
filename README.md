@@ -3,7 +3,7 @@
 </p>
 
 # The Dot Factory - TDF 
-Generates fonts for dot matrix displays. This repo is forked from [Pavius](https://github.com/pavius/the-dot-factory). Eran provide a [user guide](http://www.eran.io/the-dot-factory-an-lcd-font-and-image-generator/). On 15 March 2021 [binary v.1.1](https://github.com/Coarist/the-dot-factory/releases/tag/v.1.1) is released.
+Generates fonts for dot matrix displays. This repo is forked from [Pavius](https://github.com/pavius/the-dot-factory). Eran Duchan provided [A tech journal](http://www.eran.io/the-dot-factory-an-lcd-font-and-image-generator/). On 15 March 2021 [binary v.1.1](https://github.com/Coarist/the-dot-factory/releases/tag/v.1.1) is released.
 
 ### Contributing
 **TDF** is currently stable, unmaintained and not accepting PRs (as I don't have the time to thoroughly test contributions). 
