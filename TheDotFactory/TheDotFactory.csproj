@@ -169,8 +169,7 @@
     <Content Include="Logo1.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\Icon1.ico" />
-    <None Include="Resources\Logo1.png" />
+    <Content Include="Resources\Logo1.ico" />
     <Content Include="TDF_InnoScript.iss" />
     <Content Include="UpgradeLog.htm" />
   </ItemGroup>
