@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="https://github.com/Coarist/the-dot-factory/blob/master/TheDotFactory/Logo1Small.png?raw=true" width="150" title="Visual Studio project properties">
+  <img src="https://github.com/Coarist/the-dot-factory/blob/master/TheDotFactory/Logo1Small.png?raw=true" width="120" title="Visual Studio project properties">
 </p>
 
 # The Dot Factory - TDF 
