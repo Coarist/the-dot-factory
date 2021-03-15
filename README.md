@@ -3,7 +3,7 @@
 </p>
 
 # The Dot Factory - TDF 
-Generates fonts for dot matrix displays. This repo is forked from [Pavius](https://github.com/pavius/the-dot-factory). Eran provide a [user guide](http://www.eran.io/the-dot-factory-an-lcd-font-and-image-generator/). [Binary v.1.1](https://github.com/Coarist/the-dot-factory/releases/tag/v.1.1) is released on 15 March 2021. 
+Generates fonts for dot matrix displays. This repo is forked from [Pavius](https://github.com/pavius/the-dot-factory). Eran provide a [user guide](http://www.eran.io/the-dot-factory-an-lcd-font-and-image-generator/). On 15 March 2021 [binary v.1.1](https://github.com/Coarist/the-dot-factory/releases/tag/v.1.1) is released.
 
 ### Contributing
 **TDF** is currently stable, unmaintained and not accepting PRs (as I don't have the time to thoroughly test contributions). 
@@ -20,7 +20,7 @@ This code repository is forked from the original (see http link above) with the 
 Source code is written on the **Microsoft .NET Framework** and the graphical user interface is based on WinForms. **TDF** can be ported to other prevalent operating system such as MacOS and Linux using, for example, Mono. The focus of this repo at this point of time remains in the domain of the Windows PC. 
 
 ### Obtaining TDF 
-A Windows installer [TheDotFactorySetup.exe](https://github.com/Coarist/the-dot-factory/blob/master/TheDotFactory/Output) is available for the end users. **TDF** can be quickly set up and run by downloading the installer program and executing it on the user's PC computer. 
+Windows installer [binary v.1.1](https://github.com/Coarist/the-dot-factory/releases/tag/v.1.1) is available. This file is also duplicated and accessible in this repo: [TheDotFactorySetup.exe](https://github.com/Coarist/the-dot-factory/blob/master/TheDotFactory/Output). **TDF** can be quickly set up and run by downloading the installer program and executing it on the user's PC computer. 
 
 ### Build from source code 
 Developers who wish to compile **TDF** from source code, the Visual Studio "Publish" method can be used to generate the installer program. However, a more satisfactory method will be to create an **TDF** installer program using *Inno Setup*. To build **TDF** from source code, the development Windows PC should have these installed:
