@@ -1767,10 +1767,10 @@ namespace TheDotFactory
             resultTextSource.Append(fontInfoVarName).AppendLine(" =").AppendLine("{");
             resultTextSource.Append(fontCharHeightString).Append("\t");
             resultTextSource.Append(getCharacterDisplayString(fontInfo.startChar)).Append(", ");
-            resultTextSource.Append(m_commentStartString).AppendLine(" Start character");
+            resultTextSource.Append(m_commentStartString).Append(" Start character");
             resultTextSource.AppendLine(m_commentEndString).Append("\t");
             resultTextSource.Append(getCharacterDisplayString(fontInfo.endChar)).Append(", ");
-            resultTextSource.Append(m_commentStartString).AppendLine(" End character");
+            resultTextSource.Append(m_commentStartString).Append(" End character");
             resultTextSource.AppendLine(m_commentEndString);
             resultTextSource.Append(spaceCharacterPixelWidthString).Append(getFontInfoDescriptorsString(fontInfo, blockLookupGenerated)).Append("\t");
             resultTextSource.Append(getVariableNameFromExpression(String.Format(m_outputConfig.varNfBitmaps, getFontName(ref fontInfo.font)))).Append(", ");
@@ -1805,8 +1805,7 @@ namespace TheDotFactory
             else
             {
                 // add block lookup to header
-                resultTextHeader.Append("extern ").Append(getCharacterDescriptorArrayLookupDisplayString(fontInfo));
-                resultTextHeader.Append(m_outputConfig.varNfCharInfo).Append(getFontName(ref fontInfo.font));
+                resultTextHeader.Append("extern ").Append(String.Format(m_outputConfig.varNfCharInfo, getFontName(ref fontInfo.font)));
                 resultTextHeader.AppendLine("[];");
                 //resultTextHeader += String.Format("extern {0}[];" + nl, String.Format(m_outputConfig.varNfCharInfo, getFontName(ref fontInfo.font)));
             }
@@ -2068,10 +2067,23 @@ namespace TheDotFactory
                 generateOutputForImage(ref m_currentLoadedBitmap, ref resultStringSource, ref resultStringHeader);
             }
 
+            //-----------------------------------------------------------------
+            // Optimization: Format text on a Rtf object first, then load in
+            // into RichTextBox - UI refreshing doesn't get in the way. Move 
+            // the workload to BackgroundWorker so UI is responsive.  15Mar2021
+            //-----------------------------------------------------------------
+            string s = resultStringSource.ToString();
+            txtOutputTextSource.Text = s; // show un-colored plain text first
+            backgroundWorker1.RunWorkerAsync(argument: s); // color the text
+            toolStripStatusLabel1.Text = "Source file is being further formatted color syntax highlighting ...";
+            toolStripStatusLabel1.Visible = true;
+            timer1.Start();
+
             // color code the strings and output
-            outputSyntaxColoredString(resultStringSource.ToString(), ref txtOutputTextSource);
+            //outputSyntaxColoredString(resultStringSource.ToString(), ref txtOutputTextSource);
             outputSyntaxColoredString(resultStringHeader.ToString(), ref txtOutputTextHeader);
 
+            btnGenerate.Enabled = false; //-- re-enabled when BackgroundWorker has completed. 
             splitContainer1.Enabled = true;
         }
 
@@ -2105,7 +2117,7 @@ namespace TheDotFactory
             
             String [] lines = outputString.Split(new string[] {nl}, StringSplitOptions.None);
 
-            // for now don't syntax color for more than 2000 lines
+            // for now don't syntax color for more than 5000 lines
             if (lines.Length > 5000)
             {
                 // just set text
@@ -2273,10 +2285,6 @@ namespace TheDotFactory
             updateCommentStrings();
         }
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-        }
-
         private void cbxOutputConfiguration_SelectedIndexChanged(object sender, EventArgs e)
         {
             // check if any configuration selected
@@ -2337,6 +2345,52 @@ namespace TheDotFactory
                 // save the text
                 txtOutputTextSource.SaveFile(String.Format("{0}.c", moduleName), RichTextBoxStreamType.PlainText);
                 txtOutputTextHeader.SaveFile(String.Format("{0}.h", moduleName), RichTextBoxStreamType.PlainText);
+            }
+        }
+
+        //---------------------------------------------------------------------
+        // Rich Text formatting off-load to backgroundWorker          15Mar2021
+        //---------------------------------------------------------------------
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            string s = (string)e.Argument;
+            RichTextBox t = new RichTextBox();
+            outputSyntaxColoredString(s, ref t);
+            e.Result = t.Rtf;
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // check error, check cancel, then use result
+            if (e.Error != null)
+            {
+                // handle the error
+            }
+            else if (e.Cancelled)
+            {
+                // handle cancellation
+            }
+            else
+            {
+                txtOutputTextSource.Rtf = (string)e.Result;
+            }
+            btnGenerate.Enabled = true;
+            toolStripStatusLabel1.Visible = false;
+            timer1.Stop();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (toolStripStatusLabel1.Visible)
+            {
+                timer1.Interval = 300;
+                toolStripStatusLabel1.Visible = false;
+            }
+            else
+            {
+                timer1.Interval = 600;
+                toolStripStatusLabel1.Visible = true;
             }
         }
     }

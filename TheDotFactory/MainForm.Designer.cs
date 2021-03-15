@@ -68,14 +68,14 @@
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.label6 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.txtOutputTextSource = new System.Windows.Forms.RichTextBox();
-            this.ctxMenuSource = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tsmCopySource = new System.Windows.Forms.ToolStripMenuItem();
             this.txtOutputTextHeader = new System.Windows.Forms.RichTextBox();
             this.ctxMenuHeader = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmCopyHeader = new System.Windows.Forms.ToolStripMenuItem();
-            this.label6 = new System.Windows.Forms.Label();
+            this.txtOutputTextSource = new System.Windows.Forms.RichTextBox();
+            this.ctxMenuSource = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmCopySource = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnOutputConfig = new System.Windows.Forms.Button();
@@ -96,7 +96,11 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label16 = new System.Windows.Forms.Label();
             this.dlgSaveAs = new System.Windows.Forms.SaveFileDialog();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -111,8 +115,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbxBitmap)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
-            this.ctxMenuSource.SuspendLayout();
             this.ctxMenuHeader.SuspendLayout();
+            this.ctxMenuSource.SuspendLayout();
             this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -189,6 +193,8 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 760);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(998, 22);
@@ -520,68 +526,54 @@
             // 
             this.tableLayoutPanel5.ColumnCount = 1;
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Controls.Add(this.label13, 0, 2);
-            this.tableLayoutPanel5.Controls.Add(this.txtOutputTextSource, 0, 1);
-            this.tableLayoutPanel5.Controls.Add(this.txtOutputTextHeader, 0, 3);
             this.tableLayoutPanel5.Controls.Add(this.label6, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.label13, 0, 2);
+            this.tableLayoutPanel5.Controls.Add(this.txtOutputTextHeader, 0, 3);
+            this.tableLayoutPanel5.Controls.Add(this.txtOutputTextSource, 0, 1);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(10, 81);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(10);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 4;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel5.Size = new System.Drawing.Size(492, 641);
             this.tableLayoutPanel5.TabIndex = 17;
+            // 
+            // label6
+            // 
+            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(3, 3);
+            this.label6.Margin = new System.Windows.Forms.Padding(3);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(486, 14);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Source file (.c)";
             // 
             // label13
             // 
             this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(3, 505);
+            this.label13.Location = new System.Drawing.Point(3, 499);
             this.label13.Margin = new System.Windows.Forms.Padding(3);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(486, 12);
+            this.label13.Size = new System.Drawing.Size(486, 20);
             this.label13.TabIndex = 15;
             this.label13.Text = "Header file (.h)";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // txtOutputTextSource
-            // 
-            this.txtOutputTextSource.ContextMenuStrip = this.ctxMenuSource;
-            this.txtOutputTextSource.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtOutputTextSource.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOutputTextSource.Location = new System.Drawing.Point(3, 21);
-            this.txtOutputTextSource.Name = "txtOutputTextSource";
-            this.txtOutputTextSource.Size = new System.Drawing.Size(486, 478);
-            this.txtOutputTextSource.TabIndex = 16;
-            this.txtOutputTextSource.Text = "";
-            this.txtOutputTextSource.WordWrap = false;
-            // 
-            // ctxMenuSource
-            // 
-            this.ctxMenuSource.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmCopySource});
-            this.ctxMenuSource.Name = "ctxMenuSource";
-            this.ctxMenuSource.Size = new System.Drawing.Size(103, 26);
-            // 
-            // tsmCopySource
-            // 
-            this.tsmCopySource.Name = "tsmCopySource";
-            this.tsmCopySource.Size = new System.Drawing.Size(102, 22);
-            this.tsmCopySource.Text = "Copy";
-            this.tsmCopySource.Click += new System.EventHandler(this.tsmCopySource_Click);
-            // 
             // txtOutputTextHeader
             // 
+            this.txtOutputTextHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtOutputTextHeader.ContextMenuStrip = this.ctxMenuHeader;
-            this.txtOutputTextHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtOutputTextHeader.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOutputTextHeader.Location = new System.Drawing.Point(3, 523);
+            this.txtOutputTextHeader.Location = new System.Drawing.Point(3, 525);
             this.txtOutputTextHeader.Name = "txtOutputTextHeader";
-            this.txtOutputTextHeader.Size = new System.Drawing.Size(486, 115);
+            this.txtOutputTextHeader.Size = new System.Drawing.Size(486, 113);
             this.txtOutputTextHeader.TabIndex = 14;
             this.txtOutputTextHeader.Text = "";
             this.txtOutputTextHeader.WordWrap = false;
@@ -601,16 +593,31 @@
             this.tsmCopyHeader.Text = "Copy";
             this.tsmCopyHeader.Click += new System.EventHandler(this.tsmCopyHeader_Click);
             // 
-            // label6
+            // txtOutputTextSource
             // 
-            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(3, 3);
-            this.label6.Margin = new System.Windows.Forms.Padding(3);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(486, 12);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "Source file (.c)";
+            this.txtOutputTextSource.ContextMenuStrip = this.ctxMenuSource;
+            this.txtOutputTextSource.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtOutputTextSource.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtOutputTextSource.Location = new System.Drawing.Point(3, 23);
+            this.txtOutputTextSource.Name = "txtOutputTextSource";
+            this.txtOutputTextSource.Size = new System.Drawing.Size(486, 470);
+            this.txtOutputTextSource.TabIndex = 16;
+            this.txtOutputTextSource.Text = "";
+            this.txtOutputTextSource.WordWrap = false;
+            // 
+            // ctxMenuSource
+            // 
+            this.ctxMenuSource.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmCopySource});
+            this.ctxMenuSource.Name = "ctxMenuSource";
+            this.ctxMenuSource.Size = new System.Drawing.Size(103, 26);
+            // 
+            // tsmCopySource
+            // 
+            this.tsmCopySource.Name = "tsmCopySource";
+            this.tsmCopySource.Size = new System.Drawing.Size(102, 22);
+            this.tsmCopySource.Text = "Copy";
+            this.tsmCopySource.Click += new System.EventHandler(this.tsmCopySource_Click);
             // 
             // label2
             // 
@@ -811,6 +818,23 @@
             // 
             this.dlgSaveAs.Title = "Save source and header";
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Visible = false;
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 300;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -827,6 +851,8 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
@@ -844,8 +870,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbxBitmap)).EndInit();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
-            this.ctxMenuSource.ResumeLayout(false);
             this.ctxMenuHeader.ResumeLayout(false);
+            this.ctxMenuSource.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.ResumeLayout(false);
@@ -921,7 +947,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.RichTextBox txtOutputTextHeader;
         private System.Windows.Forms.Panel panel1;
-
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
